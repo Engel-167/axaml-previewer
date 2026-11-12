@@ -1,0 +1,57 @@
+<!-- Material 3 tokens ("M3/sys/light|dark/…"). Dark matches the Figma mockups; light is the M3 baseline it comes from.
+     The app follows the system theme, so views use these through DynamicResource. -->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ResourceDictionary.ThemeDictionaries>
+    <ResourceDictionary x:Key="Dark">
+      <SolidColorBrush x:Key="Background" Color="#141218" />
+      <SolidColorBrush x:Key="SurfaceContainer" Color="#211F26" />
+      <SolidColorBrush x:Key="SurfaceContainerHigh" Color="#2B2930" />
+      <SolidColorBrush x:Key="SurfaceContainerLowest" Color="#0F0D13" />
+      <SolidColorBrush x:Key="PrimaryContainer" Color="#4F378B" />
+      <SolidColorBrush x:Key="OnPrimaryContainer" Color="#EADDFF" />
+      <SolidColorBrush x:Key="Primary" Color="#D0BCFE" />
+      <SolidColorBrush x:Key="OnPrimary" Color="#381E72" />
+      <SolidColorBrush x:Key="OnSurface" Color="#E6E0E9" />
+      <SolidColorBrush x:Key="OnSurfaceVariant" Color="#CAC4D0" />
+      <SolidColorBrush x:Key="Error" Color="#F2B8B5" />
+      <SolidColorBrush x:Key="ErrorContainer" Color="#8C1D18" />
+      <!-- State layers: the container colour with 8% (hover) / 12% (pressed) of its "on" colour mixed in. -->
+      <SolidColorBrush x:Key="StateLayer" Color="#14EADDFF" />
+      <SolidColorBrush x:Key="PrimaryContainerHover" Color="#5D4599" />
+      <SolidColorBrush x:Key="PrimaryContainerPressed" Color="#6950A4" />
+      <SolidColorBrush x:Key="PrimaryHover" Color="#DCCBFE" />
+      <SolidColorBrush x:Key="PrimaryPressed" Color="#E6D9FF" />
+      <SolidColorBrush x:Key="SurfaceContainerHighHover" Color="#36343B" />
+      <!-- Canvas: grid lines, scroll bar track and handle. -->
+      <SolidColorBrush x:Key="GridLine" Color="#1AA303F4" />
+      <SolidColorBrush x:Key="ScrollTrack" Color="#2936343B" />
+      <SolidColorBrush x:Key="ScrollHandle" Color="#D0BCFE" />
+    </ResourceDictionary>
+    <ResourceDictionary x:Key="Light">
+      <SolidColorBrush x:Key="Background" Color="#FEF7FF" />
+      <SolidColorBrush x:Key="SurfaceContainer" Color="#F3EDF7" />
+      <SolidColorBrush x:Key="SurfaceContainerHigh" Color="#ECE6F0" />
+      <SolidColorBrush x:Key="SurfaceContainerLowest" Color="#FFFFFF" />
+      <SolidColorBrush x:Key="PrimaryContainer" Color="#EADDFF" />
+      <SolidColorBrush x:Key="OnPrimaryContainer" Color="#4F378A" />
+      <SolidColorBrush x:Key="Primary" Color="#65558F" />
+      <SolidColorBrush x:Key="OnPrimary" Color="#FFFFFF" />
+      <SolidColorBrush x:Key="OnSurface" Color="#1D1B20" />
+      <SolidColorBrush x:Key="OnSurfaceVariant" Color="#49454F" />
+      <SolidColorBrush x:Key="Error" Color="#B3261E" />
+      <SolidColorBrush x:Key="ErrorContainer" Color="#F9DEDC" />
+      <SolidColorBrush x:Key="StateLayer" Color="#141D1B20" />
+      <SolidColorBrush x:Key="PrimaryContainerHover" Color="#DED0F6" />
+      <SolidColorBrush x:Key="PrimaryContainerPressed" Color="#D7C9F1" />
+      <SolidColorBrush x:Key="PrimaryHover" Color="#716398" />
+      <SolidColorBrush x:Key="PrimaryPressed" Color="#77699C" />
+      <SolidColorBrush x:Key="SurfaceContainerHighHover" Color="#DBD6DF" />
+      <SolidColorBrush x:Key="GridLine" Color="#1F6750A4" />
+      <SolidColorBrush x:Key="ScrollTrack" Color="#33CAC4D0" />
+      <SolidColorBrush x:Key="ScrollHandle" Color="#65558F" />
+    </ResourceDictionary>
+  </ResourceDictionary.ThemeDictionaries>
+
+  <FontFamily x:Key="Roboto">avares://AxamlPreview/Assets/Fonts#Roboto</FontFamily>
+</ResourceDictionary>

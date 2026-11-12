@@ -1,0 +1,23 @@
+# Dev environment for axaml-previewer.
+#   mise install          -> .NET SDK
+[tools]
+dotnet = "10"
+
+[env]
+DOTNET_CLI_TELEMETRY_OPTOUT = "1"
+DOTNET_NOLOGO = "1"
+
+[tasks.run]
+description = "Run the previewer: mise run run -- [project.slnx | view.axaml]"
+run = "dotnet run -c Debug --"
+
+[tasks.install]
+description = "Pack axaml-previewer and install it as a global dotnet tool"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+rm -rf nupkg
+dotnet pack -c Release -o nupkg
+dotnet tool uninstall -g axaml-previewer >/dev/null 2>&1 || true
+dotnet tool install -g axaml-previewer --add-source nupkg
+"""

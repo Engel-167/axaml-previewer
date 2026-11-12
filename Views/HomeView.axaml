@@ -1,0 +1,44 @@
+<!-- Figma: "Home Screen" (1:142). -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AxamlPreview.ViewModels"
+             xmlns:views="using:AxamlPreview.Views"
+             x:Class="AxamlPreview.Views.HomeView"
+             x:DataType="vm:MainViewModel">
+    <!-- The modal centred in the window. -->
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" MinHeight="40" />
+        <RowDefinition Height="422" />
+        <RowDefinition Height="*" MinHeight="40" />
+      </Grid.RowDefinitions>
+      <!-- Modal: 370×422 with 10 padding around a 50-radius surface. -->
+      <Border Grid.Row="1" Padding="10" MaxWidth="370">
+        <Border Background="{DynamicResource SurfaceContainer}" CornerRadius="50" Padding="20">
+          <StackPanel Spacing="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="AXAML Previewer" FontSize="24" Foreground="{DynamicResource OnSurfaceVariant}" HorizontalAlignment="Center" />
+
+            <Button Classes="chip" Padding="10,6" HorizontalAlignment="Center" Click="PickProject_Click">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <Path Data="{StaticResource Icon.FileOpen18}" Fill="{DynamicResource OnPrimaryContainer}" Width="18" Height="18" VerticalAlignment="Center" />
+                <TextBlock Text="Pick a Project or Solution file" FontSize="16" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+
+            <views:ThemeSwitch HorizontalAlignment="Center" />
+
+            <StackPanel Spacing="12" HorizontalAlignment="Center">
+              <Button Classes="filled" HorizontalAlignment="Center" Command="{Binding ConnectToIdeCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="{Binding ConnectLabel}" VerticalAlignment="Center" />
+                  <Path Data="{StaticResource Icon.Connect}" Fill="{DynamicResource OnPrimary}" Width="24" Height="24" VerticalAlignment="Center" />
+                </StackPanel>
+              </Button>
+              <TextBlock Text="{Binding HomeMessage}" IsVisible="{Binding HomeMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                         FontSize="12" Foreground="{DynamicResource OnSurfaceVariant}" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="280" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+      </Border>
+    </Grid>
+</UserControl>

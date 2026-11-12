@@ -1,0 +1,29 @@
+<!-- Figma: the Home Screen's theme switch (120×36 track, 36×28 segments). Sets the preview's theme variant;
+     used on the Home screen and, scaled down, in the preview's nav bar. -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AxamlPreview.ViewModels"
+             x:Class="AxamlPreview.Views.ThemeSwitch"
+             x:DataType="vm:MainViewModel">
+  <Border Background="{DynamicResource SurfaceContainerLowest}" CornerRadius="18" Width="120" Height="36"
+          ToolTip.Tip="Preview theme: none, light or dark">
+    <!-- Radio buttons in one panel form their own group, so the two switches don't interfere. -->
+    <StackPanel Orientation="Horizontal" Margin="6,4">
+      <RadioButton Classes="segment" IsChecked="{Binding IsNoTheme}" ToolTip.Tip="No theme">
+        <Canvas Width="24" Height="24">
+          <Path Canvas.Left="-12" Canvas.Top="-6" Data="{StaticResource Icon.NoTheme}" Fill="{Binding $parent[RadioButton].Foreground}" />
+        </Canvas>
+      </RadioButton>
+      <RadioButton Classes="segment" IsChecked="{Binding IsLightTheme}" ToolTip.Tip="Light">
+        <Canvas Width="24" Height="24">
+          <Path Canvas.Left="-48" Canvas.Top="-6" Data="{StaticResource Icon.Light}" Fill="{Binding $parent[RadioButton].Foreground}" />
+        </Canvas>
+      </RadioButton>
+      <RadioButton Classes="segment" IsChecked="{Binding IsDarkTheme}" ToolTip.Tip="Dark">
+        <Canvas Width="24" Height="24">
+          <Path Canvas.Left="-84" Canvas.Top="-6" Data="{StaticResource Icon.Dark}" Fill="{Binding $parent[RadioButton].Foreground}" />
+        </Canvas>
+      </RadioButton>
+    </StackPanel>
+  </Border>
+</UserControl>

@@ -1,0 +1,148 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style Selector="Window">
+    <Setter Property="FontFamily" Value="{StaticResource Roboto}" />
+    <Setter Property="Background" Value="{DynamicResource Background}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+  </Style>
+
+  <!-- Shared: no Fluent chrome, hand cursor, a light state layer on hover/press. -->
+  <Style Selector="Button.chip, Button.filled, Button.fab, Button.plain">
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.chip:disabled /template/ ContentPresenter#PART_ContentPresenter, Button.filled:disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Opacity" Value="0.5" />
+  </Style>
+
+  <!-- Primary-container chip: "Pick a Project…", the file chip, the drop-downs. -->
+  <Style Selector="Button.chip">
+    <Setter Property="Background" Value="{DynamicResource PrimaryContainer}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnPrimaryContainer}" />
+    <Setter Property="CornerRadius" Value="40" />
+    <Setter Property="Padding" Value="6,4" />
+    <Setter Property="FontSize" Value="12" />
+  </Style>
+  <Style Selector="Button.chip:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryContainerHover}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnPrimaryContainer}" />
+  </Style>
+  <Style Selector="Button.chip:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryContainerPressed}" />
+  </Style>
+
+  <!-- Primary filled button: "Connect to IDE". -->
+  <Style Selector="Button.filled">
+    <Setter Property="Background" Value="{DynamicResource Primary}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnPrimary}" />
+    <Setter Property="CornerRadius" Value="50" />
+    <Setter Property="Padding" Value="13" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector="Button.filled:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryHover}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnPrimary}" />
+  </Style>
+  <Style Selector="Button.filled:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryPressed}" />
+  </Style>
+
+  <!-- Floating "follow the editor" button. Off: tonal; on (.on): primary like the mockup. -->
+  <Style Selector="Button.fab">
+    <Setter Property="Width" Value="50" />
+    <Setter Property="Height" Value="50" />
+    <Setter Property="CornerRadius" Value="25" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Background" Value="{DynamicResource SurfaceContainerHigh}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnSurfaceVariant}" />
+  </Style>
+  <Style Selector="Button.fab:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource SurfaceContainerHighHover}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+  </Style>
+  <Style Selector="Button.fab.on">
+    <Setter Property="Background" Value="{DynamicResource Primary}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnPrimary}" />
+  </Style>
+  <Style Selector="Button.fab.on:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryHover}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnPrimary}" />
+  </Style>
+
+  <!-- Text-only button (project name, list rows). -->
+  <Style Selector="Button.plain">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="8,4" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+  </Style>
+  <Style Selector="Button.plain:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource StateLayer}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+  </Style>
+
+  <!-- Theme switch segments. -->
+  <Style Selector="RadioButton.segment">
+    <Setter Property="Width" Value="36" />
+    <Setter Property="Height" Value="28" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Foreground" Value="{DynamicResource OnSurfaceVariant}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="Pill" Background="Transparent" CornerRadius="14">
+          <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="RadioButton.segment:pointerover /template/ Border#Pill">
+    <Setter Property="Background" Value="{DynamicResource StateLayer}" />
+  </Style>
+  <Style Selector="RadioButton.segment:checked /template/ Border#Pill">
+    <Setter Property="Background" Value="{DynamicResource PrimaryContainer}" />
+  </Style>
+  <Style Selector="RadioButton.segment:checked">
+    <Setter Property="Foreground" Value="{DynamicResource OnPrimaryContainer}" />
+  </Style>
+
+  <!-- Menus and flyouts in the app's surface colours. -->
+  <Style Selector="MenuFlyoutPresenter, FlyoutPresenter">
+    <Setter Property="Background" Value="{DynamicResource SurfaceContainerHigh}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="16" />
+    <Setter Property="FontFamily" Value="{StaticResource Roboto}" />
+  </Style>
+  <Style Selector="MenuItem">
+    <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="CornerRadius" Value="10" />
+  </Style>
+
+  <Style Selector="TextBox.search">
+    <Setter Property="Background" Value="{DynamicResource SurfaceContainerLowest}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="20" />
+    <Setter Property="Padding" Value="12,6" />
+    <Setter Property="FontSize" Value="13" />
+  </Style>
+  <Style Selector="TextBox.search:focus /template/ Border#PART_BorderElement, TextBox.search:pointerover /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="{DynamicResource SurfaceContainerLowest}" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+
+  <Style Selector="ListBox.files">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.files ListBoxItem">
+    <Setter Property="Padding" Value="10,6" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ListBox.files ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryContainer}" />
+  </Style>
+</Styles>

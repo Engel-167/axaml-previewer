@@ -1,0 +1,13 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AxamlPreview.ViewModels"
+        xmlns:views="using:AxamlPreview.Views"
+        x:Class="AxamlPreview.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="AXAML Previewer"
+        Width="460" Height="900" MinWidth="320" MinHeight="680">
+  <Panel>
+    <views:HomeView IsVisible="{Binding IsHome}" />
+    <views:PreviewView IsVisible="{Binding !IsHome}" />
+  </Panel>
+</Window>

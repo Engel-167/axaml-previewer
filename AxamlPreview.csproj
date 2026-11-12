@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>AxamlPreview</RootNamespace>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon />
+
+    <!-- Shipped as a .NET tool: dotnet tool install -g axaml-previewer -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>axaml-previewer</ToolCommandName>
+    <PackageId>axaml-previewer</PackageId>
+    <Version>0.1.0</Version>
+    <Product>AXAML Previewer</Product>
+    <Description>A live, interactive previewer for the .axaml views of Avalonia® apps, which follows your editor. Not affiliated with AvaloniaUI OÜ.</Description>
+    <Authors>Engel-167</Authors>
+    <Copyright>Copyright (c) 2026 Engel-167</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Engel-167/axaml-previewer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Engel-167/axaml-previewer</RepositoryUrl>
+    <PackageTags>axaml;xaml;previewer;designer;dotnet-tool</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets/**" />
+    <None Include="README.md" Pack="true" PackagePath="/" />
+    <None Include="THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Remote.Protocol" Version="12.1.3" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="11.0.0" />
+  </ItemGroup>
+
+</Project>

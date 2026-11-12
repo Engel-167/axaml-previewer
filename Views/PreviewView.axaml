@@ -1,0 +1,144 @@
+<!-- Figma: "Open File Screen" (1:2). -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AxamlPreview.ViewModels"
+             xmlns:views="using:AxamlPreview.Views"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="using:AxamlPreview.Controls"
+             xmlns:services="using:AxamlPreview.Services"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="890"
+             x:Class="AxamlPreview.Views.PreviewView"
+             x:DataType="vm:MainViewModel">
+  <Grid>
+    <controls:PreviewSurface x:Name="Surface" Background="{DynamicResource Background}"
+                             GridLineBrush="{DynamicResource GridLine}" ScrollTrackBrush="{DynamicResource ScrollTrack}" ScrollHandleBrush="{DynamicResource ScrollHandle}" Zoom="{Binding Zoom, Mode=TwoWay}" />
+
+    <!-- Nav bar: 40 high, 10 from the edges, the chips inside 20 high. -->
+    <Border VerticalAlignment="Top"
+            Margin="10"
+            Height="40"
+            Padding="10"
+            CornerRadius="50"
+            Background="{DynamicResource SurfaceContainer}">
+
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <Button x:Name="FileButton"
+                Grid.Column="0"
+                Classes="chip"
+                ToolTip.Tip="{Binding CurrentFile}"
+                Height="{Binding #ThemeSwitch.Bounds.Height}">
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <Path Data="{StaticResource Icon.FileOpen14}"
+                  Fill="{DynamicResource OnPrimaryContainer}"
+                  Width="14"
+                  Height="14"
+                  VerticalAlignment="Center" />
+
+            <TextBlock Text="{Binding FileLabel}"
+                       VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis"
+                       MaxWidth="170" />
+          </StackPanel>
+          <Button.Flyout>
+            <Flyout Placement="BottomEdgeAlignedLeft">
+              <StackPanel Width="320" Spacing="8">
+                <TextBox x:Name="FilterBox" Classes="search" PlaceholderText="Filter views" Text="{Binding FileFilter}" />
+                <ListBox x:Name="FileList" Classes="files" ItemsSource="{Binding Files}" MaxHeight="420" SelectionMode="Single">
+                  <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:FileEntry">
+                      <StackPanel Spacing="1">
+                        <TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource OnSurface}" />
+                        <TextBlock Text="{Binding Folder}" FontSize="11" Foreground="{DynamicResource OnSurfaceVariant}" Opacity="0.7"
+                                   IsVisible="{Binding Folder, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                      </StackPanel>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </StackPanel>
+            </Flyout>
+          </Button.Flyout>
+        </Button>
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6">
+          <!-- The Home screen's theme switch at 3/4 size (27 high), overhanging the bar's padding a little. -->
+          <LayoutTransformControl x:Name="ThemeSwitch" Margin="0,-4" VerticalAlignment="Center">
+            <LayoutTransformControl.LayoutTransform>
+              <ScaleTransform ScaleX="0.75" ScaleY="0.75" />
+            </LayoutTransformControl.LayoutTransform>
+            <views:ThemeSwitch/>
+          </LayoutTransformControl>
+
+          <Button Classes="chip" ToolTip.Tip="Zoom (Ctrl+wheel on the canvas)" Height="{Binding #ThemeSwitch.Bounds.Height}">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <Path Data="{StaticResource Icon.Zoom}" Fill="{DynamicResource OnPrimaryContainer}" Width="14" Height="14" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding ZoomLabel}" VerticalAlignment="Center" />
+              <Path Data="{StaticResource Icon.DropDown}" Fill="{DynamicResource OnPrimaryContainer}" Width="18" Height="18" VerticalAlignment="Center" />
+            </StackPanel>
+            <Button.Flyout>
+              <MenuFlyout Placement="BottomEdgeAlignedRight">
+                <MenuItem Header="Fit" Command="{Binding SetZoomCommand}" CommandParameter="fit" />
+                <MenuItem Header="50%" Command="{Binding SetZoomCommand}" CommandParameter="0.5" />
+                <MenuItem Header="75%" Command="{Binding SetZoomCommand}" CommandParameter="0.75" />
+                <MenuItem Header="90%" Command="{Binding SetZoomCommand}" CommandParameter="0.9" />
+                <MenuItem Header="100%" Command="{Binding SetZoomCommand}" CommandParameter="1" />
+                <MenuItem Header="125%" Command="{Binding SetZoomCommand}" CommandParameter="1.25" />
+                <MenuItem Header="150%" Command="{Binding SetZoomCommand}" CommandParameter="1.5" />
+                <MenuItem Header="200%" Command="{Binding SetZoomCommand}" CommandParameter="2" />
+                <MenuItem Header="300%" Command="{Binding SetZoomCommand}" CommandParameter="3" />
+              </MenuFlyout>
+            </Button.Flyout>
+          </Button>
+
+          <Button Classes="chip"
+                  Padding="0"
+                  Width="{Binding #ThemeSwitch.Bounds.Height}"
+                  Height="{Binding #ThemeSwitch.Bounds.Height}"
+                  CornerRadius="50" Command="{Binding RefreshCommand}"
+                  ToolTip.Tip="Rebuild the project and reload the preview">
+            <Path Data="{StaticResource Icon.Refresh}" Fill="{DynamicResource OnPrimaryContainer}" Width="22" Height="20" />
+          </Button>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Project name (70 from the top, half opacity); click to go back and open another. -->
+    <Button Classes="plain" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,64,0,0" Padding="8,2"
+            Command="{Binding CloseProjectCommand}" ToolTip.Tip="Close this project">
+      <TextBlock Text="{Binding ProjectName}" FontSize="12" Foreground="{DynamicResource OnSurface}" Opacity="0.5" />
+    </Button>
+
+    <!-- Progress / empty state. -->
+    <Border IsVisible="{Binding ShowCenterMessage}" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="300"
+            Background="{DynamicResource SurfaceContainer}" CornerRadius="24" Padding="20,14">
+      <StackPanel Spacing="10">
+        <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Foreground="{DynamicResource Primary}" MinWidth="160" />
+        <TextBlock Text="{Binding CenterMessage}" FontSize="13" Foreground="{DynamicResource OnSurfaceVariant}" TextWrapping="Wrap" TextAlignment="Center" />
+      </StackPanel>
+    </Border>
+
+    <!-- Errors and notices, above the scroll bar and clear of the follow button. -->
+    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="14,0,90,32" Spacing="8">
+      <Border IsVisible="{Binding Notice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+              Background="{DynamicResource SurfaceContainerHigh}" CornerRadius="16" Padding="12,8">
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBlock Text="{Binding Notice}" FontSize="12" Foreground="{DynamicResource OnSurfaceVariant}" TextWrapping="Wrap" VerticalAlignment="Center" />
+          <Button Grid.Column="1" Classes="plain" Content="✕" FontSize="11" Padding="6,2" Command="{Binding DismissNoticeCommand}" />
+        </Grid>
+      </Border>
+      <Border IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+              Background="{DynamicResource SurfaceContainerHigh}" BorderBrush="{DynamicResource Error}" BorderThickness="1" CornerRadius="16" Padding="12,8">
+        <Grid ColumnDefinitions="*,Auto">
+          <SelectableTextBlock Text="{Binding Error}" FontSize="12" Foreground="{DynamicResource Error}" TextWrapping="Wrap" VerticalAlignment="Center" MaxHeight="160" />
+          <Button Grid.Column="1" Classes="plain" Content="✕" FontSize="11" Padding="6,2" VerticalAlignment="Top" Command="{Binding DismissErrorCommand}" />
+        </Grid>
+      </Border>
+    </StackPanel>
+
+    <!-- Follow the editor (Figma: "Track Editing files"), 30 from the right and bottom. -->
+    <Button Classes="fab" Classes.on="{Binding IsFollowing}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,30,30"
+            Command="{Binding ToggleFollowCommand}" ToolTip.Tip="{Binding FollowTip}">
+      <Path Data="{StaticResource Icon.Connect}" Fill="{Binding $parent[Button].Foreground}" Width="24" Height="24" />
+    </Button>
+  </Grid>
+</UserControl>
