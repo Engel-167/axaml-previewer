@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using AxamlPreview.Services;
 using AxamlPreview.ViewModels;
 using AxamlPreview.Views;
 
@@ -14,7 +15,7 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var vm = new MainViewModel();
+            var vm = new MainViewModel(new ThemeManager(this));
             desktop.MainWindow = new MainWindow { DataContext = vm };
             desktop.ShutdownRequested += (_, _) => vm.Dispose();
             vm.Start(desktop.Args ?? []);

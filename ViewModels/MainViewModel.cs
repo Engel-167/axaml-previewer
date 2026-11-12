@@ -23,6 +23,11 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private IReadOnlyList<string> _allFiles = [];
     private string? _editorFile;
     private DispatcherTimer? _resendTimer;
+    private Timer? _liveTimer;
+    private int _livePolling;
+    /// <summary>What the host is showing: the text last sent and whether it came from Zed's unsaved buffer.</summary>
+    private string? _lastSentText;
+    private bool _lastSentUnsaved;
 
     [ObservableProperty] private bool _isHome = true;
     [ObservableProperty] private string _projectName = "";
@@ -47,11 +52,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     public event Action? FitRequested;
     public event Action<PreviewSession?>? SessionChanged;
 
-    public MainViewModel()
+    public MainViewModel(ThemeManager? themes = null)
     {
         _theme = _settings.Theme;
         _editor.ActiveFileChanged += path => Dispatcher.UIThread.Post(() => OnEditorFile(path));
+        Settings = new SettingsViewModel(_settings, themes, _editor.IsAvailable);
+        Settings.LiveTypingChanged += _ => UpdateLiveTyping();
     }
+
+    public SettingsViewModel Settings { get; }
 
     public string ZoomLabel => Math.Round(Zoom * 100).ToString(CultureInfo.InvariantCulture) + "%";
     public string ConnectLabel => IsFollowing ? $"Following {_editor.EditorName}" : "Connect to IDE";
@@ -195,13 +204,16 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         _session = session;
         SessionChanged?.Invoke(session);
         session.Start();
+        _lastSentText = null;
         SendCurrent();
+        UpdateLiveTyping();
     }
 
     private void StopSession()
     {
         var session = _session;
         _session = null;
+        UpdateLiveTyping();
         SessionChanged?.Invoke(null);
         session?.Dispose();
     }
@@ -244,16 +256,63 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         if (entry != null) Select(entry.Path);
     }
 
+    /// <summary>Sends the current file: Zed's unsaved text when live typing is on and there is some, else the file on disk.</summary>
     private void SendCurrent()
     {
         if (_session == null || _workspace == null || _launch == null || CurrentFile == null) return;
+        var unsaved = Settings.LiveTyping ? _editor.ReadUnsaved(CurrentFile) : null;
         string text;
-        try { text = File.ReadAllText(CurrentFile); }
-        catch (IOException) { return; }
+        if (unsaved != null) text = unsaved;
+        else
+        {
+            try { text = File.ReadAllText(CurrentFile); }
+            catch (IOException) { return; }
+        }
+        SendText(text, unsaved != null);
+    }
+
+    private void SendText(string text, bool unsaved)
+    {
+        if (_session == null || _workspace == null || _launch == null || CurrentFile == null) return;
+        _lastSentText = text;
+        _lastSentUnsaved = unsaved;
         var owner = _workspace.OwnerOf(CurrentFile) ?? _workspace.Startup!;
         var assembly = Path.Combine(_launch.OutputDirectory, owner.AssemblyName + ".dll");
         var projectPath = "/" + Path.GetRelativePath(owner.Directory, CurrentFile).Replace('\\', '/');
         _session.ShowXaml(XamlTheme.Apply(text, Theme), assembly, projectPath);
+    }
+
+    // ---- live typing ----------------------------------------------------------------------------------------------
+
+    /// <summary>Polls Zed's unsaved text for the current file while live typing is on and a preview is running.</summary>
+    private void UpdateLiveTyping()
+    {
+        var on = Settings.LiveTyping && _session != null;
+        if (on && _liveTimer == null) _liveTimer = new Timer(_ => PollUnsaved(), null, 0, 250);
+        else if (!on && _liveTimer != null)
+        {
+            _liveTimer.Dispose();
+            _liveTimer = null;
+            if (_lastSentUnsaved) SendCurrent(); // back to the saved file
+        }
+    }
+
+    private void PollUnsaved()
+    {
+        if (Interlocked.Exchange(ref _livePolling, 1) == 1) return;
+        try
+        {
+            var file = CurrentFile;
+            if (file == null) return;
+            var unsaved = _editor.ReadUnsaved(file);
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (file != CurrentFile || _liveTimer == null) return;
+                if (unsaved != null && unsaved != _lastSentText) SendText(unsaved, true);
+                else if (unsaved == null && _lastSentUnsaved) SendCurrent(); // saved or reverted: show the file
+            });
+        }
+        finally { Volatile.Write(ref _livePolling, 0); }
     }
 
     private void OnEditorFile(string path)
@@ -452,6 +511,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         _loadCts?.Cancel();
         StopSession();
         _watcher?.Dispose();
+        _liveTimer?.Dispose();
         _editor.Dispose();
     }
 }

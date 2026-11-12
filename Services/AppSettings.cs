@@ -8,6 +8,10 @@ public sealed class AppSettings
     public PreviewTheme Theme { get; set; } = PreviewTheme.None;
     public bool FollowEditor { get; set; }
     public string? LastProject { get; set; }
+    /// <summary>The app's own theme: "system", "zed" (match Zed) or a theme id ("builtin:Nord", "zed:Fleet Dark").</summary>
+    public string AppTheme { get; set; } = "system";
+    /// <summary>Preview Zed's unsaved text as you type instead of waiting for a save.</summary>
+    public bool LiveTyping { get; set; }
 
     private static string FilePath
     {

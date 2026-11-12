@@ -98,6 +98,15 @@
                   ToolTip.Tip="Rebuild the project and reload the preview">
             <Path Data="{StaticResource Icon.Refresh}" Fill="{DynamicResource OnPrimaryContainer}" Width="22" Height="20" />
           </Button>
+
+          <Button Classes="chip"
+                  Padding="5"
+                  Width="{Binding #ThemeSwitch.Bounds.Height}"
+                  Height="{Binding #ThemeSwitch.Bounds.Height}"
+                  CornerRadius="50" Command="{Binding Settings.OpenCommand}"
+                  ToolTip.Tip="Settings">
+            <Path Data="{StaticResource Icon.Settings}" Fill="{DynamicResource OnPrimaryContainer}" Stretch="Uniform" />
+          </Button>
         </StackPanel>
       </Grid>
     </Border>

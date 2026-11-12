@@ -10,6 +10,8 @@ editor and follows it. Pairs with [axaml-ls](https://github.com/Engel-167/axaml-
 - **Canvas**: Ctrl + wheel zooms around the pointer; Ctrl + 0 resets it. Dragging the empty canvas (or using the middle button anywhere) pans. The wheel scrolls the design when the pointer is over it, and the canvas otherwise. The zoom menu has *Fit*.
 - **Theme**: preview with no theme override, Light or Dark. The variant is applied through a design-only style, so your file is never changed.
 - **Follow the editor** (the round button, or *Connect to IDE*): the preview shows the `.axaml` file you are on. Switching to any other kind of file keeps the last preview. If the file belongs to a different project, that project is opened.
+- **Preview while typing** (Settings): the preview shows Zed's unsaved text as you type, not just the saved file. It reads the text Zed keeps for restoring unsaved work, so Zed's `"session": { "restore_unsaved_buffers": true }` (the default) must stay on. Off by default.
+- **App themes** (the gear on the Home card or in the nav bar): System (Material, light or dark like the OS), Match Zed (follows the theme in Zed's `settings.json`, including its light/dark mode), built-in palettes (Material, Catppuccin, One, Ayu, Gruvbox, Dracula, Nord, Tokyo Night, Rosé Pine, Solarized, Monokai, Everforest) and every theme installed in Zed (`~/.config/zed/themes` and theme extensions).
 
 ## Install
 

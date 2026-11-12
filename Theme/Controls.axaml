@@ -134,6 +134,51 @@
     <Setter Property="BorderThickness" Value="0" />
   </Style>
 
+  <!-- M3 switch: 52×32 track; off = outlined track with a small knob, on = primary track with a large knob. -->
+  <Style Selector="ToggleButton.switch">
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="Track" Width="52" Height="32" CornerRadius="16" BorderThickness="2"
+                Background="{DynamicResource SurfaceContainerHigh}" BorderBrush="{DynamicResource OnSurfaceVariant}">
+          <Ellipse Name="Knob" Width="16" Height="16" Margin="6,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                   Fill="{DynamicResource OnSurfaceVariant}" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="ToggleButton.switch:checked /template/ Border#Track">
+    <Setter Property="Background" Value="{DynamicResource Primary}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Primary}" />
+  </Style>
+  <Style Selector="ToggleButton.switch:checked /template/ Ellipse#Knob">
+    <Setter Property="Width" Value="24" />
+    <Setter Property="Height" Value="24" />
+    <Setter Property="Margin" Value="2,0" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="Fill" Value="{DynamicResource OnPrimary}" />
+  </Style>
+  <Style Selector="ToggleButton.switch:disabled">
+    <Setter Property="Opacity" Value="0.38" />
+  </Style>
+
+  <!-- Settings sheet: theme rows. -->
+  <Style Selector="ListBox.themes">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.themes ListBoxItem">
+    <Setter Property="Padding" Value="10,8" />
+    <Setter Property="CornerRadius" Value="16" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Margin" Value="0,1" />
+  </Style>
+  <Style Selector="ListBox.themes ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource StateLayer}" />
+  </Style>
+  <Style Selector="ListBox.themes ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter, ListBox.themes ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryContainer}" />
+  </Style>
+
   <Style Selector="ListBox.files">
     <Setter Property="Background" Value="Transparent" />
   </Style>

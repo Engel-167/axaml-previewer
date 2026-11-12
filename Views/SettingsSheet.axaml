@@ -1,0 +1,72 @@
+<!-- Settings (gear on the Home card and in the preview's nav bar): the app's theme and live typing. Drawn over the
+     window with a scrim; Escape, the close button or a click on the scrim closes it. -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AxamlPreview.ViewModels"
+             x:Class="AxamlPreview.Views.SettingsSheet"
+             x:DataType="vm:SettingsViewModel">
+  <Panel>
+    <Border Name="Scrim" Background="#66000000" PointerPressed="Scrim_PointerPressed" />
+
+    <Border Background="{DynamicResource SurfaceContainer}" CornerRadius="28" Margin="16,24" Padding="20,18,20,12"
+            MaxWidth="420" VerticalAlignment="Stretch">
+      <Grid RowDefinitions="Auto,Auto,Auto,Auto,*">
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBlock Text="Settings" FontSize="22" Foreground="{DynamicResource OnSurface}" VerticalAlignment="Center" />
+          <Button Grid.Column="1" Classes="plain" Width="36" Height="36" Padding="8" CornerRadius="18"
+                  Command="{Binding CloseCommand}" ToolTip.Tip="Close (Esc)">
+            <Path Data="{StaticResource Icon.Close}" Fill="{DynamicResource OnSurfaceVariant}" Stretch="Uniform" />
+          </Button>
+        </Grid>
+
+        <!-- Live typing. -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,18,0,0">
+          <StackPanel Spacing="2" VerticalAlignment="Center" Margin="0,0,12,0">
+            <TextBlock Text="Preview while typing" FontSize="16" Foreground="{DynamicResource OnSurface}" />
+            <TextBlock Text="{Binding LiveTypingNote}" FontSize="12" Foreground="{DynamicResource OnSurfaceVariant}" TextWrapping="Wrap" />
+          </StackPanel>
+          <ToggleButton Grid.Column="1" Classes="switch" VerticalAlignment="Center" IsChecked="{Binding LiveTyping}"
+                        IsEnabled="{Binding LiveTypingAvailable}" ToolTip.Tip="Preview Zed's unsaved text" />
+        </Grid>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,22,0,8">
+          <TextBlock Text="App theme" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource Primary}" VerticalAlignment="Center" />
+          <Button Grid.Column="1" Classes="plain" FontSize="12" Padding="10,4" Command="{Binding ReloadThemesCommand}"
+                  ToolTip.Tip="Read Zed's installed themes again">
+            <TextBlock Text="Reload Zed themes" Foreground="{DynamicResource OnSurfaceVariant}" />
+          </Button>
+        </Grid>
+
+        <TextBox Grid.Row="3" Classes="search" PlaceholderText="Filter themes" Text="{Binding ThemeFilter}" Margin="0,0,0,8" />
+
+        <ListBox Grid.Row="4" Classes="themes" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" SelectionMode="Single,AlwaysSelected">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:ThemeOption">
+              <Grid ColumnDefinitions="Auto,*,Auto">
+                <!-- Swatch: the theme's background with its accent, text and muted text. -->
+                <Border Width="52" Height="36" CornerRadius="10" Background="{Binding Background}"
+                        BorderBrush="{DynamicResource StateLayer}" BorderThickness="1">
+                  <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse Width="12" Height="12" Fill="{Binding Accent}" VerticalAlignment="Center" />
+                    <StackPanel Spacing="3" VerticalAlignment="Center">
+                      <Rectangle Width="18" Height="4" RadiusX="2" RadiusY="2" Fill="{Binding Text}" />
+                      <Rectangle Width="12" Height="4" RadiusX="2" RadiusY="2" Fill="{Binding Muted}" />
+                      <Rectangle Width="15" Height="4" RadiusX="2" RadiusY="2" Fill="{Binding Surface}" />
+                    </StackPanel>
+                  </StackPanel>
+                </Border>
+                <StackPanel Grid.Column="1" Spacing="1" Margin="12,0,8,0" VerticalAlignment="Center">
+                  <TextBlock Text="{Binding Name}" FontSize="14" Foreground="{DynamicResource OnSurface}" />
+                  <TextBlock Text="{Binding Subtitle}" FontSize="11" Foreground="{DynamicResource OnSurfaceVariant}" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <Path Grid.Column="2" Data="{StaticResource Icon.Check}" Fill="{DynamicResource OnPrimaryContainer}" Stretch="Uniform"
+                      Width="18" Height="18" VerticalAlignment="Center"
+                      IsVisible="{Binding $parent[ListBoxItem].IsSelected}" />
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+    </Border>
+  </Panel>
+</UserControl>

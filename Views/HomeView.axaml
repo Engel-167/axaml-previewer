@@ -14,6 +14,7 @@
       </Grid.RowDefinitions>
       <!-- Modal: 370×422 with 10 padding around a 50-radius surface. -->
       <Border Grid.Row="1" Padding="10" MaxWidth="370">
+        <Panel>
         <Border Background="{DynamicResource SurfaceContainer}" CornerRadius="50" Padding="20">
           <StackPanel Spacing="40" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="AXAML Previewer" FontSize="24" Foreground="{DynamicResource OnSurfaceVariant}" HorizontalAlignment="Center" />
@@ -39,6 +40,13 @@
             </StackPanel>
           </StackPanel>
         </Border>
+        <!-- Settings, in the card's top-right corner. -->
+        <Button Classes="plain" Width="40" Height="40" Padding="9" CornerRadius="20" Margin="0,22,22,0"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Command="{Binding Settings.OpenCommand}" ToolTip.Tip="Settings">
+          <Path Data="{StaticResource Icon.Settings}" Fill="{DynamicResource OnSurfaceVariant}" Stretch="Uniform" />
+        </Button>
+        </Panel>
       </Border>
     </Grid>
 </UserControl>

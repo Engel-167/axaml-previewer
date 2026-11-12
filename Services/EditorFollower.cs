@@ -74,9 +74,9 @@ public sealed class ZedFollower : IEditorFollower
         finally { Volatile.Write(ref _busy, 0); }
     }
 
-    private string? ReadActiveFile()
+    private SqliteConnection Open()
     {
-        using var connection = new SqliteConnection(new SqliteConnectionStringBuilder
+        var connection = new SqliteConnection(new SqliteConnectionStringBuilder
         {
             DataSource = _database,
             Mode = SqliteOpenMode.ReadOnly,
@@ -84,6 +84,42 @@ public sealed class ZedFollower : IEditorFollower
             Pooling = false,
         }.ToString());
         connection.Open();
+        return connection;
+    }
+
+    private const string UnsavedQuery = """
+        SELECT e.contents
+        FROM editors e
+        JOIN workspaces w ON w.workspace_id = e.workspace_id
+        WHERE CAST(e.path AS TEXT) = $path AND e.contents IS NOT NULL
+        ORDER BY w.timestamp DESC
+        LIMIT 1
+        """;
+
+    /// <summary>
+    /// The unsaved text Zed holds for <paramref name="path"/>, or null when the buffer is saved (or Zed is not available).
+    /// Zed writes a dirty buffer's text to its database about 200 ms after each edit, for restoring unsaved work
+    /// ("session": {"restore_unsaved_buffers": true}, the default), and clears it on save.
+    /// </summary>
+    public string? ReadUnsaved(string path)
+    {
+        if (_database == null) return null;
+        try
+        {
+            using var connection = Open();
+            using var command = connection.CreateCommand();
+            command.CommandText = UnsavedQuery;
+            command.Parameters.AddWithValue("$path", path);
+            return command.ExecuteScalar() as string;
+        }
+        catch (SqliteException) { return null; }
+        catch (IOException) { return null; }
+        catch (InvalidOperationException) { return null; }
+    }
+
+    private string? ReadActiveFile()
+    {
+        using var connection = Open();
         using var command = connection.CreateCommand();
         command.CommandText = Query;
         using var reader = command.ExecuteReader();
